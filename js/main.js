@@ -287,12 +287,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ─── PARALLAX HERO ────────────────────────────────────
+  // ─── PARALLAX ─────────────────────────────────────────
   const heroBg = document.querySelector('.hero__bg img');
   if (heroBg) {
     window.addEventListener('scroll', () => {
-      const scrollY = window.scrollY;
-      heroBg.style.transform = `translateY(${scrollY * 0.3}px) scale(1.1)`;
+      heroBg.style.transform = `translateY(${window.scrollY * 0.3}px) scale(1.1)`;
+    }, { passive: true });
+  }
+  // Page-hero parallax (inner pages)
+  const pageHeroContent = document.querySelector('.page-hero .container');
+  if (pageHeroContent) {
+    window.addEventListener('scroll', () => {
+      pageHeroContent.style.transform = `translateY(${window.scrollY * 0.12}px)`;
     }, { passive: true });
   }
 
