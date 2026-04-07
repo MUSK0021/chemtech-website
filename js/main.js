@@ -52,15 +52,39 @@ document.addEventListener('DOMContentLoaded', () => {
   const hamburger = document.querySelector('.hamburger');
   const navLinks = document.querySelector('.navbar__links');
   if (hamburger && navLinks) {
+    // Create overlay backdrop
+    const overlay = document.createElement('div');
+    overlay.className = 'mobile-overlay';
+    document.body.appendChild(overlay);
+
+    // Inject phone link into mobile drawer if not already present
+    if (!navLinks.querySelector('.mobile-nav-phone')) {
+      const phoneLink = document.createElement('a');
+      phoneLink.href = 'tel:4022156542';
+      phoneLink.className = 'mobile-nav-phone';
+      phoneLink.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>(402) 215-6542`;
+      navLinks.appendChild(phoneLink);
+    }
+
+    const openMenu = () => {
+      navLinks.classList.add('mobile-open');
+      hamburger.classList.add('active');
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    };
+    const closeMenu = () => {
+      navLinks.classList.remove('mobile-open');
+      hamburger.classList.remove('active');
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    };
+
     hamburger.addEventListener('click', () => {
-      navLinks.classList.toggle('mobile-open');
-      document.body.style.overflow = navLinks.classList.contains('mobile-open') ? 'hidden' : '';
+      navLinks.classList.contains('mobile-open') ? closeMenu() : openMenu();
     });
+    overlay.addEventListener('click', closeMenu);
     navLinks.querySelectorAll('a:not(.nav-dropdown__trigger)').forEach(link => {
-      link.addEventListener('click', () => {
-        navLinks.classList.remove('mobile-open');
-        document.body.style.overflow = '';
-      });
+      link.addEventListener('click', closeMenu);
     });
   }
 
