@@ -286,7 +286,7 @@ p:last-child { margin-bottom: 0; }
   color: var(--black);
 }
 .navbar__phone:hover { color: var(--red); }
-.navbar__phone svg { width: 14px; color: var(--red); }
+.navbar__phone svg { width: 16px; height: 16px; color: var(--red); flex-shrink: 0; }
 .navbar .btn--primary {
   padding: 9px 18px;
   font-size: 13px;
@@ -1154,8 +1154,8 @@ p:last-child { margin-bottom: 0; }
 /* FLOATING PHONE BUTTON */
 .floating-phone {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
+  bottom: 28px;
+  right: 28px;
   width: 56px;
   height: 56px;
   border-radius: 50%;
@@ -1165,14 +1165,17 @@ p:last-child { margin-bottom: 0; }
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 20px rgba(196,30,36,0.4);
-  z-index: 999;
+  z-index: 500;
   transition: all var(--transition);
 }
 .floating-phone:hover {
-  transform: scale(1.1);
+  transform: scale(1.08);
   box-shadow: 0 6px 30px rgba(196,30,36,0.5);
 }
-.floating-phone svg { width: 24px; height: 24px; }
+.floating-phone svg { width: 24px; height: 24px; display: block; flex-shrink: 0; }
+
+/* Mobile-only nav phone link — hidden on desktop */
+.mobile-nav-phone { display: none; }
 
 /* RESPONSIVE */
 @media (max-width: 1024px) {
