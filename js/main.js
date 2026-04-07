@@ -230,13 +230,15 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('panelFound').textContent = d.found;
       document.getElementById('panelHealth').textContent = d.health;
       document.getElementById('panelTreatment').textContent = d.treatment;
-      pestPanel.classList.add('active');
-      pestOverlay.classList.add('active');
+      const content = pestPanel.querySelector('.pest-panel__content');
+      if (content) content.scrollTop = 0;
+      pestOverlay.style.display = 'block';
+      pestPanel.style.right = '0';
       document.body.style.overflow = 'hidden';
     };
     const closePanel = () => {
-      pestPanel.classList.remove('active');
-      pestOverlay.classList.remove('active');
+      pestOverlay.style.display = 'none';
+      pestPanel.style.right = '-420px';
       document.body.style.overflow = '';
     };
     document.querySelectorAll('[data-pest]').forEach(btn => {
