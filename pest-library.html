@@ -5,6 +5,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pest Library | Chem-Tech Pest Solutions</title>
   <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* Backdrop overlay */
+    .pest-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0);
+      z-index: 199; pointer-events: none; transition: background 0.3s ease;
+    }
+    .pest-backdrop.active { background: rgba(0,0,0,0.3); pointer-events: all; }
+
+    /* Sliding panel */
+    .pest-panel {
+      position: fixed; top: 0; right: 0; height: 100%;
+      max-width: 420px; width: 100%; background: #fff;
+      z-index: 200; overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+      box-shadow: -8px 0 40px rgba(0,0,0,0.15);
+    }
+    .pest-panel.active { transform: translateX(0); }
+
+    /* Panel content styling */
+    .pest-panel-close {
+      position: absolute; top: 16px; right: 16px;
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1px solid #e0e0e0; background: #fff;
+      font-size: 20px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s; z-index: 10;
+    }
+    .pest-panel-close:hover { background: #f5f0eb; }
+    .pest-panel-header { text-align: center; padding: 48px 32px 24px; }
+    .pest-panel-icon { font-size: 48px; margin-bottom: 12px; }
+    .pest-panel-name {
+      font-family: 'Playfair Display', serif; font-size: 24px;
+      font-weight: 500; color: #1A1A1A; margin: 0 0 12px;
+    }
+    .pest-panel-badges { display: flex; gap: 8px; justify-content: center; }
+    .pest-panel-badge {
+      padding: 4px 14px; border-radius: 50px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+    }
+    .pest-panel-badge--category { background: #f5f0eb; color: #6B6B6B; }
+    .pest-panel-badge--extreme   { background: #fde8e8; color: #C41E24; }
+    .pest-panel-badge--high      { background: #fff3e0; color: #e65100; }
+    .pest-panel-badge--medium    { background: #fef9e7; color: #b7950b; }
+    .pest-panel-divider { height: 1px; background: #e0dad3; margin: 0 32px; }
+    .pest-panel-sections { padding: 8px 32px 32px; }
+    .pest-panel-section { margin-top: 24px; }
+    .pest-panel-section-title {
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: #C41E24; margin: 0 0 8px;
+    }
+    .pest-panel-section-text { font-size: 15px; color: #6B6B6B; line-height: 1.7; margin: 0; }
+    .pest-panel-cta {
+      display: block; width: calc(100% - 64px); margin: 32px 32px;
+      padding: 16px; background: #C41E24; color: #fff;
+      text-align: center; border-radius: 50px;
+      font-size: 15px; font-weight: 600; text-decoration: none;
+      transition: background 0.2s;
+    }
+    .pest-panel-cta:hover { background: #8B1A1F; }
+  </style>
 </head>
 <body>
 <div class="topbar"><div class="container">Same-Day Service Available — Call <a href="tel:4022156542">(402) 215-6542</a> | Serving Eastern Nebraska</div></div>
@@ -36,14 +97,7 @@
         <div class="pest-card__category">Roaches</div>
         <span class="pest-card__severity severity--extreme">EXTREME</span>
         <p class="pest-card__desc">Large reddish-brown roaches found in dark, moist areas like basements and sewers.</p>
-        <button class="pest-card__link"
-          data-icon="🪳" data-name="American Cockroach" data-category="Roaches"
-          data-severity="EXTREME" data-sev-class="severity--extreme"
-          data-looks="Large, reddish-brown, 1.5–2 inches long with wings. Has a yellowish figure-eight pattern on the back of its head. One of the largest cockroach species found in homes."
-          data-found="Basements, sewers, floor drains, boiler rooms, and damp crawl spaces. Often enter homes through drains and gaps around pipes."
-          data-health="Triggers asthma and allergic reactions. Spreads bacteria including Salmonella and E. coli by contaminating food preparation surfaces and stored food."
-          data-treatment="Gel baiting in harborage areas, crack-and-crevice residual applications, drain treatments, and entry point exclusion to prevent re-infestation."
-        >Learn More →</button>
+        <button class="pest-card__link" onclick="openPestPanel(0)">Learn More →</button>
       </div>
       <div class="pest-card reveal stagger-2" data-category="roaches">
         <div class="pest-card__icon">🪳</div>
@@ -51,14 +105,7 @@
         <div class="pest-card__category">Roaches</div>
         <span class="pest-card__severity severity--extreme">EXTREME</span>
         <p class="pest-card__desc">Small light-brown roaches that reproduce rapidly indoors, especially in kitchens.</p>
-        <button class="pest-card__link"
-          data-icon="🪳" data-name="German Cockroach" data-category="Roaches"
-          data-severity="EXTREME" data-sev-class="severity--extreme"
-          data-looks="Small, light-brown with two dark parallel stripes running behind the head. About ½–⅝ inch long. The most common roach found indoors in Nebraska."
-          data-found="Kitchens, bathrooms, behind appliances, inside cabinets, and anywhere warm and moist. They cluster near food and water sources."
-          data-health="Carry 33 kinds of bacteria, 6 parasitic worms, and 7 human pathogens. A major asthma and allergy trigger, especially in children."
-          data-treatment="Combination of gel baits, insect growth regulators (IGRs), crack-and-crevice sprays, targeted vacuuming, and sanitation guidance."
-        >Learn More →</button>
+        <button class="pest-card__link" onclick="openPestPanel(1)">Learn More →</button>
       </div>
       <div class="pest-card reveal stagger-3" data-category="spiders">
         <div class="pest-card__icon">🕷️</div>
@@ -66,14 +113,7 @@
         <div class="pest-card__category">Spiders</div>
         <span class="pest-card__severity severity--high">HIGH</span>
         <p class="pest-card__desc">Venomous spider identified by violin-shaped marking. Found in dark, undisturbed areas.</p>
-        <button class="pest-card__link"
-          data-icon="🕷️" data-name="Brown Recluse Spider" data-category="Spiders"
-          data-severity="HIGH" data-sev-class="severity--high"
-          data-looks="Light to dark brown with a distinctive violin-shaped marking on its back. Body is ¼–¾ inch with long legs. Has six eyes in pairs rather than the usual eight."
-          data-found="Dark, undisturbed areas — woodpiles, closets, under furniture, inside cardboard boxes, and attics. They avoid human contact but bite when trapped against skin."
-          data-health="Venom can cause necrotic skin lesions requiring medical attention. Rarely life-threatening, but bites can result in serious tissue damage if left untreated."
-          data-treatment="Sticky traps for monitoring, targeted residual treatments in harborage areas, de-cluttering, and exterior exclusion to prevent entry."
-        >Learn More →</button>
+        <button class="pest-card__link" onclick="openPestPanel(2)">Learn More →</button>
       </div>
       <div class="pest-card reveal stagger-4" data-category="insects">
         <div class="pest-card__icon">🐜</div>
@@ -81,14 +121,7 @@
         <div class="pest-card__category">Ants</div>
         <span class="pest-card__severity severity--high">HIGH</span>
         <p class="pest-card__desc">Large black ants that tunnel through wood, causing structural damage to homes.</p>
-        <button class="pest-card__link"
-          data-icon="🐜" data-name="Carpenter Ants" data-category="Ants"
-          data-severity="HIGH" data-sev-class="severity--high"
-          data-looks="Large black or dark red ants, ½–⅝ inch long. No stinger but powerful mandibles. Workers are polymorphic — varying in size within the same colony."
-          data-found="Moist or decaying wood in window frames, roof eaves, attic beams, tree stumps, and wood piles. They tunnel through wood to build galleries, but do not eat it."
-          data-health="Rarely bite humans, but cause significant structural damage over time by hollowing out load-bearing wood for nesting."
-          data-treatment="Locating and directly treating the parent colony, void dusting, exterior perimeter residual treatments, and identifying and fixing moisture sources driving infestation."
-        >Learn More →</button>
+        <button class="pest-card__link" onclick="openPestPanel(3)">Learn More →</button>
       </div>
       <div class="pest-card reveal stagger-1" data-category="insects">
         <div class="pest-card__icon">🦟</div>
@@ -96,14 +129,7 @@
         <div class="pest-card__category">Fleas</div>
         <span class="pest-card__severity severity--high">HIGH</span>
         <p class="pest-card__desc">Tiny jumping parasites that feed on pet and human blood. Hard to eliminate without treatment.</p>
-        <button class="pest-card__link"
-          data-icon="🦟" data-name="Fleas" data-category="Fleas"
-          data-severity="HIGH" data-sev-class="severity--high"
-          data-looks="Tiny (1/16–1/8 inch), dark reddish-brown, wingless with a hard flattened body and powerful hind legs capable of jumping 150× their body length."
-          data-found="Pet bedding, carpets, upholstered furniture, and shaded yard areas where animals rest. Eggs fall off pets and hatch throughout the home."
-          data-health="Cause intense itching and skin irritation. Can transmit tapeworms and murine typhus. Severe infestations can cause anemia in small pets."
-          data-treatment="Indoor carpet and upholstery treatments, IGR application to break the life cycle, yard perimeter spray, and coordination with veterinary flea prevention products."
-        >Learn More →</button>
+        <button class="pest-card__link" onclick="openPestPanel(4)">Learn More →</button>
       </div>
       <div class="pest-card reveal stagger-2" data-category="insects">
         <div class="pest-card__icon">🪲</div>
@@ -111,14 +137,7 @@
         <div class="pest-card__category">Bed Bugs</div>
         <span class="pest-card__severity severity--extreme">EXTREME</span>
         <p class="pest-card__desc">Nocturnal parasites that hide in mattresses and feed on human blood.</p>
-        <button class="pest-card__link"
-          data-icon="🪲" data-name="Bed Bugs" data-category="Bed Bugs"
-          data-severity="EXTREME" data-sev-class="severity--extreme"
-          data-looks="Flat, oval, reddish-brown — roughly the size of an apple seed (4–5mm). After feeding they swell and deepen in color. Nymphs are nearly translucent."
-          data-found="Mattress seams, box springs, bed frames, headboards, furniture joints, electrical outlets, and behind baseboards. Spread through travel and secondhand furniture."
-          data-health="Bites cause red, itchy welts and can cause significant psychological distress and sleep deprivation. Not known to transmit disease, but infestations worsen rapidly."
-          data-treatment="AZEX-certified heat treatment raises the entire room to 120°F+ to kill all life stages. Combined with residual pesticide application and a follow-up inspection."
-        >Learn More →</button>
+        <button class="pest-card__link" onclick="openPestPanel(5)">Learn More →</button>
       </div>
       <div class="pest-card reveal stagger-3" data-category="rodents">
         <div class="pest-card__icon">🐀</div>
@@ -126,14 +145,7 @@
         <div class="pest-card__category">Rodents</div>
         <span class="pest-card__severity severity--high">HIGH</span>
         <p class="pest-card__desc">Agile rats that nest in attics, trees, and upper structures of buildings.</p>
-        <button class="pest-card__link"
-          data-icon="🐀" data-name="Roof Rats" data-category="Rodents"
-          data-severity="HIGH" data-sev-class="severity--high"
-          data-looks="Slender, dark brown or black with a long tail exceeding body length. Large ears, pointed snout. About 13–18 inches total. More agile climbers than Norway rats."
-          data-found="Attics, rafters, trees, dense ivy, and upper parts of structures. Enter buildings through gaps as small as a half-inch near rooflines and utility penetrations."
-          data-health="Transmit leptospirosis, rat-bite fever, and salmonellosis. Contaminate food and chew through electrical wiring, creating fire hazards."
-          data-treatment="Snap traps and tamper-resistant bait stations, thorough exclusion sealing of all entry points, and trimming trees and vegetation away from structures."
-        >Learn More →</button>
+        <button class="pest-card__link" onclick="openPestPanel(6)">Learn More →</button>
       </div>
       <div class="pest-card reveal stagger-4" data-category="rodents">
         <div class="pest-card__icon">🐭</div>
@@ -141,14 +153,7 @@
         <div class="pest-card__category">Rodents</div>
         <span class="pest-card__severity severity--high">HIGH</span>
         <p class="pest-card__desc">Small rodents that squeeze through tiny gaps and reproduce rapidly in homes.</p>
-        <button class="pest-card__link"
-          data-icon="🐭" data-name="House Mice" data-category="Rodents"
-          data-severity="HIGH" data-sev-class="severity--high"
-          data-looks="Small, gray-brown with large ears, a pointed snout, and a hairless tail roughly equal to body length. About 5–8 inches total. Can squeeze through a gap the size of a dime."
-          data-found="Wall voids, attics, kitchen cabinets, basements, and anywhere near food storage. One pair can produce up to 60 offspring per year."
-          data-health="Spread Hantavirus, Salmonella, and Listeria through droppings, urine, and nesting materials. Contaminate far more food than they consume."
-          data-treatment="Snap traps for active populations, bait stations for ongoing control, comprehensive exclusion sealing of all entry points, and sanitation consultation."
-        >Learn More →</button>
+        <button class="pest-card__link" onclick="openPestPanel(7)">Learn More →</button>
       </div>
       <div class="pest-card reveal stagger-1" data-category="stinging">
         <div class="pest-card__icon">🐝</div>
@@ -156,14 +161,7 @@
         <div class="pest-card__category">Stinging</div>
         <span class="pest-card__severity severity--high">HIGH</span>
         <p class="pest-card__desc">Stinging insects that build nests on structures. Can be dangerous for allergic individuals.</p>
-        <button class="pest-card__link"
-          data-icon="🐝" data-name="Bees &amp; Wasps" data-category="Stinging Insects"
-          data-severity="HIGH" data-sev-class="severity--high"
-          data-looks="Varies by species — bumble bees are fuzzy and yellow-black; yellow jackets are sleek with narrow waists; paper wasps are slender with long dangling legs in flight."
-          data-found="Eaves, attic vents, wall cavities, ground burrows, decks, fences, and tree branches. Yellow jackets often nest underground or inside wall voids."
-          data-health="Painful stings can trigger anaphylactic shock in allergic individuals. Yellow jackets are aggressive when disturbed and can sting multiple times."
-          data-treatment="Nest removal at night when insects are least active, targeted insecticidal dust or foam application, and preventive sealing of entry points before nesting season."
-        >Learn More →</button>
+        <button class="pest-card__link" onclick="openPestPanel(8)">Learn More →</button>
       </div>
       <div class="pest-card reveal stagger-2" data-category="insects">
         <div class="pest-card__icon">🪰</div>
@@ -171,14 +169,7 @@
         <div class="pest-card__category">Insects</div>
         <span class="pest-card__severity severity--medium">MEDIUM</span>
         <p class="pest-card__desc">Disease-carrying insects that breed rapidly in unsanitary conditions and contaminate food.</p>
-        <button class="pest-card__link"
-          data-icon="🪰" data-name="Flies" data-category="Insects"
-          data-severity="MEDIUM" data-sev-class="severity--medium"
-          data-looks="House flies are gray, ¼ inch with red compound eyes. Blow flies are metallic blue or green. Fruit flies are tiny (1/8 inch) with distinctive red eyes."
-          data-found="Garbage, animal waste, rotting organic material, clogged drains, and anywhere food is exposed. Larvae (maggots) develop in decaying matter."
-          data-health="Carry over 100 pathogens including Salmonella, Typhoid, and E. coli. They regurgitate digestive fluids onto food before feeding, spreading contamination rapidly."
-          data-treatment="Source identification and elimination, commercial fly light traps, residual surface treatments, drain treatments for breeding sites, and exclusion screening."
-        >Learn More →</button>
+        <button class="pest-card__link" onclick="openPestPanel(9)">Learn More →</button>
       </div>
       <div class="pest-card reveal stagger-3" data-category="other">
         <div class="pest-card__icon">🐛</div>
@@ -186,14 +177,7 @@
         <div class="pest-card__category">Wood Destroyers</div>
         <span class="pest-card__severity severity--extreme">EXTREME</span>
         <p class="pest-card__desc">Silent destroyers costing Americans $5 billion annually in structural damage.</p>
-        <button class="pest-card__link"
-          data-icon="🐛" data-name="Termites" data-category="Wood Destroyers"
-          data-severity="EXTREME" data-sev-class="severity--extreme"
-          data-looks="Small pale insects resembling ants. Swarmers have two equal-length wings that they shed. Workers are cream-colored and rarely seen. Often mistaken for flying ants."
-          data-found="Wood in contact with soil, crawl spaces, wall voids, window and door frames, and anywhere moisture meets structural wood. Subterranean termites build mud tubes."
-          data-health="No direct health risk, but cause catastrophic structural damage — averaging $3,000+ per affected home. Damage is rarely covered by homeowners insurance."
-          data-treatment="Liquid termiticide soil barrier treatments, bait station monitoring systems, and annual WDI inspections to detect colonies before damage becomes severe."
-        >Learn More →</button>
+        <button class="pest-card__link" onclick="openPestPanel(10)">Learn More →</button>
       </div>
       <div class="pest-card reveal stagger-4" data-category="other">
         <div class="pest-card__icon">🦔</div>
@@ -201,14 +185,7 @@
         <div class="pest-card__category">Yard Pests</div>
         <span class="pest-card__severity severity--medium">MEDIUM</span>
         <p class="pest-card__desc">Burrowing mammals that damage lawns and gardens with extensive tunnel systems.</p>
-        <button class="pest-card__link"
-          data-icon="🦔" data-name="Moles" data-category="Yard Pests"
-          data-severity="MEDIUM" data-sev-class="severity--medium"
-          data-looks="Small velvety gray mammals with paddle-shaped front feet built for digging, tiny hidden eyes, no visible ears, and a pointed snout. About 6–8 inches long."
-          data-found="Lawns, gardens, golf courses, and any area with loose, moist soil rich in earthworms. Surface ridges and molehills are signs of their tunnel networks."
-          data-health="No direct health threat, but their tunnels collapse underfoot creating fall hazards, destroy grass root systems, and allow weeds to invade damaged turf."
-          data-treatment="Trapping is the most reliable method. Supplemented with mole repellent treatments, grub control to reduce food sources, and soil compaction where possible."
-        >Learn More →</button>
+        <button class="pest-card__link" onclick="openPestPanel(11)">Learn More →</button>
       </div>
     </div>
   </div>
@@ -219,37 +196,136 @@
 <footer class="footer"><div class="container"><div class="footer__grid"><div><img src="images/logo.png" alt="Chem-Tech Pest Solutions" class="footer__logo-img"><p style="margin-top:12px;">Serving all of Eastern Nebraska since 1984.</p></div><div><h4>Quick Links</h4><div class="footer__links"><a href="about.html">About Us</a><a href="services.html">Services</a><a href="pest-library.html">Pest Library</a><a href="reviews.html">Reviews</a><a href="blog.html">Tips & Blog</a><a href="contact.html">Contact</a></div></div><div><h4>Services</h4><div class="footer__links"><a href="service-residential.html">Residential</a><a href="service-commercial.html">Commercial</a><a href="service-agricultural.html">Agricultural</a><a href="service-bedbug.html">Bed Bug</a><a href="service-termite.html">Termite</a><a href="service-grain.html">Grain Fumigation</a></div></div><div><h4>Contact</h4><div class="footer__contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg><div><a href="tel:4022156542"><strong>(402) 215-6542</strong></a></div></div><div class="footer__contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg><div><a href="mailto:services@chemtechpestsolutions.com">services@chemtechpestsolutions.com</a></div></div></div></div><div class="footer__bottom">© 2025 Chem-Tech Pest Solutions LLC. All rights reserved.</div></div></footer>
 <a href="tel:4022156542" class="floating-phone"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></a>
 
-<!-- PEST MODAL -->
-<div id="pestModal" role="dialog" aria-modal="true" aria-label="Pest details">
-  <div id="pestModalBox">
-    <span id="modalClose" aria-label="Close">&times;</span>
-    <div id="modalIcon"></div>
-    <h2 id="modalName"></h2>
-    <div id="modalBadges">
-      <span id="modalCategory"></span>
-      <span id="modalSeverity"></span>
-    </div>
-    <hr id="modalDivider">
-    <div class="modal-section">
-      <h4>WHAT IT LOOKS LIKE</h4>
-      <p id="modalLooks"></p>
-    </div>
-    <div class="modal-section">
-      <h4>WHERE IT'S FOUND</h4>
-      <p id="modalFound"></p>
-    </div>
-    <div class="modal-section">
-      <h4>HEALTH RISKS</h4>
-      <p id="modalHealth"></p>
-    </div>
-    <div class="modal-section">
-      <h4>OUR TREATMENT APPROACH</h4>
-      <p id="modalTreatment"></p>
-    </div>
-    <a href="contact.html" id="modalCTA">Contact Us About This Pest</a>
-  </div>
+<!-- PEST SLIDING PANEL -->
+<div class="pest-backdrop" id="pestBackdrop" onclick="closePestPanel()"></div>
+<div class="pest-panel" id="pestPanel">
+  <button class="pest-panel-close" onclick="closePestPanel()">×</button>
+  <div id="pestPanelContent"></div>
 </div>
 
 <script src="js/main.js"></script>
+<script>
+const pestData = [
+  {
+    icon:"🪳", name:"American Cockroach", category:"ROACHES", severity:"EXTREME", severityClass:"extreme",
+    looks:"Large, reddish-brown, 1.5–2 inches long with wings. Has a yellowish figure-eight pattern on the back of its head. One of the largest cockroach species found in homes.",
+    found:"Basements, sewers, floor drains, boiler rooms, and damp crawl spaces. Often enter homes through drains and gaps around pipes.",
+    risks:"Triggers asthma and allergic reactions. Spreads bacteria including Salmonella and E. coli by contaminating food preparation surfaces and stored food.",
+    treatment:"Gel baiting in harborage areas, crack-and-crevice residual applications, drain treatments, and entry point exclusion to prevent re-infestation."
+  },
+  {
+    icon:"🪳", name:"German Cockroach", category:"ROACHES", severity:"EXTREME", severityClass:"extreme",
+    looks:"Small, light-brown, about half inch long, two dark parallel stripes running behind the head. The most common roach found indoors in Nebraska.",
+    found:"Kitchens, bathrooms, behind appliances, inside cabinets, and anywhere warm and moist. They cluster near food and water sources.",
+    risks:"Carry 33 kinds of bacteria, 6 parasitic worms, and 7 human pathogens. A major asthma and allergy trigger, especially in children.",
+    treatment:"Combination of gel baits, insect growth regulators (IGRs), crack-and-crevice sprays, targeted vacuuming, and sanitation guidance."
+  },
+  {
+    icon:"🕷️", name:"Brown Recluse Spider", category:"SPIDERS", severity:"HIGH", severityClass:"high",
+    looks:"Light to dark brown, violin-shaped marking on back, about 1 inch with legs extended.",
+    found:"Dark, undisturbed areas: closets, attics, basements, storage boxes, garages, and behind furniture.",
+    risks:"Venomous bite can cause tissue necrosis and serious medical complications. Seek medical attention immediately if bitten.",
+    treatment:"Sticky traps for monitoring, residual sprays in harborage areas, clutter reduction, and exclusion sealing of entry points."
+  },
+  {
+    icon:"🐜", name:"Carpenter Ants", category:"ANTS", severity:"HIGH", severityClass:"high",
+    looks:"Large black ants, 1/4 to 1/2 inch. May have wings during mating season.",
+    found:"Moist or decaying wood in walls, porches, window frames, roof areas, and tree stumps near structures.",
+    risks:"Cause significant structural damage by tunneling through wood. They don't eat wood but excavate galleries for nesting.",
+    treatment:"Locate and treat nest directly with targeted products, perimeter barrier treatment, and moisture reduction recommendations."
+  },
+  {
+    icon:"🦟", name:"Fleas", category:"FLEAS", severity:"HIGH", severityClass:"high",
+    looks:"Tiny dark brown jumping insects, about 1/16 inch. Visible on pets and in carpet fibers.",
+    found:"Pet bedding, carpets, upholstered furniture, yards with wildlife or stray animal activity.",
+    risks:"Cause itchy bites and allergic reactions. Can transmit tapeworms and bacterial diseases to pets and humans.",
+    treatment:"Comprehensive interior carpet and furniture treatment, yard perimeter spray, and coordination with pet treatment schedules."
+  },
+  {
+    icon:"🪲", name:"Bed Bugs", category:"BED BUGS", severity:"EXTREME", severityClass:"extreme",
+    looks:"Flat, oval, reddish-brown, about 1/4 inch. Look for visible blood spots on sheets and mattresses.",
+    found:"Mattress seams, box springs, bed frames, headboards, furniture cracks, and luggage after travel.",
+    risks:"Cause itchy welts, sleep disruption, and anxiety. Don't transmit diseases but cause significant distress.",
+    treatment:"Controlled heat treatment killing all life stages, chemical application to cracks and crevices, mattress encasements, and follow-up inspection."
+  },
+  {
+    icon:"🐀", name:"Roof Rats", category:"RODENTS", severity:"HIGH", severityClass:"high",
+    looks:"Dark brown to black, 6-8 inches body plus long tail, pointed nose, large ears.",
+    found:"Attics, trees, upper levels of structures, dense vegetation, and roof lines.",
+    risks:"Contaminate food and surfaces, spread diseases, chew electrical wires creating serious fire hazards.",
+    treatment:"Strategic trap placement in activity areas, entry point sealing with professional materials, sanitation recommendations, and ongoing monitoring."
+  },
+  {
+    icon:"🐭", name:"House Mice", category:"RODENTS", severity:"HIGH", severityClass:"high",
+    looks:"Small gray-brown body about 2-3 inches, large ears, pointed nose, thin tail.",
+    found:"Wall voids, kitchen cabinets, attics, garages, and any gap larger than 1/4 inch.",
+    risks:"Contaminate food with droppings, spread Hantavirus and Salmonella, trigger allergies, and damage insulation and wiring.",
+    treatment:"Snap trap program in key areas, thorough exclusion sealing of all entry points, sanitation improvements, and monitoring program."
+  },
+  {
+    icon:"🐝", name:"Bees & Wasps", category:"STINGING", severity:"HIGH", severityClass:"high",
+    looks:"Yellow and black, 1/2 to 1 inch. Build paper or mud nests on structures.",
+    found:"Eaves, soffits, gutters, playground equipment, trees, shrubs, and underground burrows.",
+    risks:"Deliver painful stings that can cause life-threatening allergic reactions (anaphylaxis) in sensitive individuals.",
+    treatment:"Safe nest removal, preventive treatments on common nesting surfaces, and entry point sealing to prevent indoor nesting."
+  },
+  {
+    icon:"🪰", name:"Flies", category:"INSECTS", severity:"MEDIUM", severityClass:"medium",
+    looks:"Gray or black, about 1/4 inch, large compound eyes, transparent wings.",
+    found:"Near garbage, pet waste, kitchens, restaurants, and anywhere with decaying organic matter.",
+    risks:"Spread E. coli, Salmonella, and dozens of other pathogens by landing on food and surfaces after contacting waste.",
+    treatment:"Sanitation improvement program, exterior bait stations, UV fly light traps for commercial settings, and exclusion screening."
+  },
+  {
+    icon:"🐛", name:"Termites", category:"WOOD DESTROYERS", severity:"EXTREME", severityClass:"extreme",
+    looks:"White to light brown, soft-bodied, about 1/4 inch. Swarmers (reproductive termites) have wings.",
+    found:"Underground colonies accessing structures through foundation, inside walls, anywhere with wood-to-soil contact.",
+    risks:"Cause over $5 billion in US damage annually. Silently destroy structural wood over months before detection.",
+    treatment:"Liquid barrier treatment around foundation, bait monitoring station installation, direct wood treatment, and annual inspection program."
+  },
+  {
+    icon:"🦔", name:"Moles", category:"YARD PESTS", severity:"MEDIUM", severityClass:"medium",
+    looks:"Dark gray, 6-7 inches long, velvety fur, oversized front digging claws, tiny eyes.",
+    found:"Lawns, gardens, flower beds, and any area with moist soil and active grub populations.",
+    risks:"Destroy grass root systems creating dead patches, create tripping hazards with surface tunnels, and damage irrigation lines.",
+    treatment:"Professional trapping program, grub population reduction to eliminate food source, habitat modification, and repellent barrier application."
+  }
+];
+
+function openPestPanel(index) {
+  const p = pestData[index];
+  document.getElementById('pestPanelContent').innerHTML =
+    '<div class="pest-panel-header">' +
+      '<div class="pest-panel-icon">' + p.icon + '</div>' +
+      '<h2 class="pest-panel-name">' + p.name + '</h2>' +
+      '<div class="pest-panel-badges">' +
+        '<span class="pest-panel-badge pest-panel-badge--category">' + p.category + '</span>' +
+        '<span class="pest-panel-badge pest-panel-badge--' + p.severityClass + '">' + p.severity + '</span>' +
+      '</div>' +
+    '</div>' +
+    '<div class="pest-panel-divider"></div>' +
+    '<div class="pest-panel-sections">' +
+      '<div class="pest-panel-section"><p class="pest-panel-section-title">WHAT IT LOOKS LIKE</p><p class="pest-panel-section-text">' + p.looks + '</p></div>' +
+      '<div class="pest-panel-section"><p class="pest-panel-section-title">WHERE IT\'S FOUND</p><p class="pest-panel-section-text">' + p.found + '</p></div>' +
+      '<div class="pest-panel-section"><p class="pest-panel-section-title">HEALTH RISKS</p><p class="pest-panel-section-text">' + p.risks + '</p></div>' +
+      '<div class="pest-panel-section"><p class="pest-panel-section-title">OUR TREATMENT APPROACH</p><p class="pest-panel-section-text">' + p.treatment + '</p></div>' +
+    '</div>' +
+    '<a href="contact.html" class="pest-panel-cta">Contact Us About This Pest</a>';
+  document.getElementById('pestPanel').scrollTop = 0;
+  document.getElementById('pestBackdrop').classList.add('active');
+  document.getElementById('pestPanel').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePestPanel() {
+  document.getElementById('pestBackdrop').classList.remove('active');
+  document.getElementById('pestPanel').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closePestPanel();
+});
+</script>
 </body>
 </html>

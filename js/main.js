@@ -112,42 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ─── PEST MODAL ───────────────────────────────────────
-  const pestModal = document.getElementById('pestModal');
-  const pestModalBox = document.getElementById('pestModalBox');
-
-  if (pestModal) {
-    const openModal = (btn) => {
-      const d = btn.dataset;
-      document.getElementById('modalIcon').textContent = d.icon;
-      document.getElementById('modalName').textContent = d.name;
-      document.getElementById('modalCategory').textContent = d.category;
-      const sev = document.getElementById('modalSeverity');
-      sev.textContent = d.severity;
-      sev.className = d.sevClass;
-      document.getElementById('modalLooks').textContent = d.looks;
-      document.getElementById('modalFound').textContent = d.found;
-      document.getElementById('modalHealth').textContent = d.health;
-      document.getElementById('modalTreatment').textContent = d.treatment;
-      pestModalBox.scrollTop = 0;
-      pestModal.style.display = 'flex';
-      requestAnimationFrame(() => pestModal.classList.add('open'));
-      document.body.style.overflow = 'hidden';
-    };
-    const closeModal = () => {
-      pestModal.classList.remove('open');
-      setTimeout(() => {
-        pestModal.style.display = 'none';
-        document.body.style.overflow = '';
-      }, 300);
-    };
-    document.querySelectorAll('.pest-card__link').forEach(btn => {
-      btn.addEventListener('click', () => openModal(btn));
-    });
-    document.getElementById('modalClose').addEventListener('click', closeModal);
-    pestModal.addEventListener('click', e => { if (e.target === pestModal) closeModal(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-  }
+  // Pest panel is handled by inline script in pest-library.html
 
   // ─── PEST LIBRARY FILTER ──────────────────────────────
   const pestFilters = document.querySelectorAll('.pest-filter');
