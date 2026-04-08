@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ─── PEST SLIDE-OUT PANEL ─────────────────────────────
+  // ─── PEST MODAL ───────────────────────────────────────
   const pestData = {
     'american-cockroach': {
       icon: '🪳', name: 'American Cockroach', category: 'Roaches',
@@ -212,41 +212,41 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  const pestPanel = document.getElementById('pestPanel');
-  const pestOverlay = document.getElementById('pestOverlay');
-  const pestPanelClose = document.getElementById('pestPanelClose');
+  const pestModal = document.getElementById('pestModal');
+  const pestModalBox = document.getElementById('pestModalBox');
 
-  if (pestPanel && pestOverlay) {
-    const openPanel = (pestKey) => {
+  if (pestModal) {
+    const openModal = (pestKey) => {
       const d = pestData[pestKey];
       if (!d) return;
-      document.getElementById('panelIcon').textContent = d.icon;
-      document.getElementById('panelName').textContent = d.name;
-      document.getElementById('panelCategory').textContent = d.category;
-      const sev = document.getElementById('panelSeverity');
+      document.getElementById('modalIcon').textContent = d.icon;
+      document.getElementById('modalName').textContent = d.name;
+      document.getElementById('modalCategory').textContent = d.category;
+      const sev = document.getElementById('modalSeverity');
       sev.textContent = d.severity;
-      sev.className = 'pest-panel__sev ' + d.severityClass;
-      document.getElementById('panelLooks').textContent = d.looks;
-      document.getElementById('panelFound').textContent = d.found;
-      document.getElementById('panelHealth').textContent = d.health;
-      document.getElementById('panelTreatment').textContent = d.treatment;
-      const content = pestPanel.querySelector('.pest-panel__content');
-      if (content) content.scrollTop = 0;
-      pestOverlay.style.display = 'block';
-      pestPanel.style.right = '0';
+      sev.className = d.severityClass;
+      document.getElementById('modalLooks').textContent = d.looks;
+      document.getElementById('modalFound').textContent = d.found;
+      document.getElementById('modalHealth').textContent = d.health;
+      document.getElementById('modalTreatment').textContent = d.treatment;
+      pestModalBox.scrollTop = 0;
+      pestModal.style.display = 'flex';
+      requestAnimationFrame(() => pestModal.classList.add('open'));
       document.body.style.overflow = 'hidden';
     };
-    const closePanel = () => {
-      pestOverlay.style.display = 'none';
-      pestPanel.style.right = '-420px';
-      document.body.style.overflow = '';
+    const closeModal = () => {
+      pestModal.classList.remove('open');
+      setTimeout(() => {
+        pestModal.style.display = 'none';
+        document.body.style.overflow = '';
+      }, 300);
     };
     document.querySelectorAll('[data-pest]').forEach(btn => {
-      btn.addEventListener('click', () => openPanel(btn.dataset.pest));
+      btn.addEventListener('click', () => openModal(btn.dataset.pest));
     });
-    pestPanelClose.addEventListener('click', closePanel);
-    pestOverlay.addEventListener('click', closePanel);
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    pestModal.addEventListener('click', e => { if (e.target === pestModal) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
   }
 
   // ─── PEST LIBRARY FILTER ──────────────────────────────

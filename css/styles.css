@@ -760,67 +760,69 @@ p:last-child { margin-bottom: 0; }
   cursor: pointer;
 }
 
-/* ── PEST SLIDE-OUT PANEL ──────────────────────── */
-#pestOverlay {
+/* ── PEST MODAL ──────────────────────── */
+#pestModal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.6);
   z-index: 9998;
   display: none;
-}
-
-.pest-panel {
-  position: fixed;
-  top: 0;
-  right: -420px;
-  width: 400px;
-  height: 100%;
-  background: #fff;
-  z-index: 9999;
-  transition: right 0.3s ease;
-  box-shadow: -4px 0 30px rgba(0,0,0,0.15);
-  display: flex;
-  flex-direction: column;
-}
-
-.pest-panel__header {
-  flex-shrink: 0;
-  padding: 20px;
-  border-bottom: 1px solid #eee;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.pest-panel__close {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--cream);
-  border: 1px solid var(--gray-border);
-  display: flex;
-  align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: background var(--transition);
-  box-shadow: var(--shadow-sm);
+  align-items: center;
 }
-.pest-panel__close:hover { background: var(--cream-dark); }
-.pest-panel__close svg { width: 24px; height: 24px; display: block; }
-
-.pest-panel__content {
-  flex: 1;
+#pestModalBox {
+  background: #fff;
+  max-width: 500px;
+  width: 90%;
+  max-height: 85vh;
   overflow-y: auto;
-  padding: 24px 32px 120px;
+  border-radius: 16px;
+  padding: 40px;
+  position: relative;
+  z-index: 9999;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.3s ease, transform 0.3s ease;
   -webkit-overflow-scrolling: touch;
 }
-
-.pest-panel__icon { font-size: 64px; line-height: 1; margin-bottom: 12px; text-align: center; }
-.pest-panel__name { font-size: 24px; font-weight: 600; margin-bottom: 14px; color: var(--black); text-align: center; }
-.pest-panel__badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 28px; }
-.pest-panel__cat {
+#pestModal.open #pestModalBox {
+  opacity: 1;
+  transform: scale(1);
+}
+#modalClose {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #1A1A1A;
+  line-height: 1;
+  user-select: none;
+}
+#modalClose:hover { color: var(--red); }
+#modalIcon {
+  font-size: 48px;
+  text-align: center;
+  margin-bottom: 4px;
+}
+#modalName {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--black);
+  margin: 12px 0;
+}
+#modalBadges {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+#modalCategory {
   padding: 4px 14px;
   background: var(--cream-dark);
   color: var(--gray);
@@ -830,7 +832,7 @@ p:last-child { margin-bottom: 0; }
   text-transform: uppercase;
   letter-spacing: 0.6px;
 }
-.pest-panel__sev {
+#modalSeverity {
   padding: 4px 14px;
   border-radius: 50px;
   font-size: 11px;
@@ -838,40 +840,44 @@ p:last-child { margin-bottom: 0; }
   text-transform: uppercase;
   letter-spacing: 0.6px;
 }
-
-.pest-panel__section {
-  padding-top: 20px;
+#modalDivider {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 0 0 20px;
+}
+.modal-section {
   margin-top: 20px;
-  border-top: 1px solid var(--gray-border);
 }
-.pest-panel__section:first-of-type {
-  border-top: none;
-  padding-top: 0;
-  margin-top: 0;
-}
-.pest-panel__section h4 {
+.modal-section h4 {
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--red);
+  color: #C41E24;
   margin-bottom: 8px;
 }
-.pest-panel__section p {
-  font-size: 14px;
-  color: var(--gray);
+.modal-section p {
+  font-size: 15px;
+  color: #6B6B6B;
   line-height: 1.75;
   margin: 0;
 }
-
-.pest-panel__content .btn--primary {
+#modalCTA {
+  display: block;
   width: 100%;
-  justify-content: center;
-  padding: 14px 24px;
-  font-size: 14px;
-  margin-top: 32px;
+  margin-top: 24px;
+  padding: 16px;
+  background: #C41E24;
+  color: #fff;
+  text-align: center;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  transition: background 0.2s ease;
 }
+#modalCTA:hover { background: #a01820; }
 
 /* SERVICE AREAS */
 .areas-grid {
